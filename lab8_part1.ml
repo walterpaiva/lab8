@@ -171,7 +171,6 @@ module type INTERVAL =
   sig 
     type interval
     type endpoint
-    val create : 
     (* ... complete the interface here ... *)
   end ;;
 
