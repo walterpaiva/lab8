@@ -108,7 +108,7 @@ module MakeStack (Element: SERIALIZE) : (STACK with type element = Element.t) =
     let pop_helper (s : stack) : (element * stack) =
       match s with
       | [] -> raise Empty
-      | hd :: tl -> hd, tl
+      | hd :: tl -> (hd, tl)
 
     let top (s : stack) : element =
       fst (pop_helper s)
@@ -134,7 +134,13 @@ Exercise 1B: Now, make a module `IntStack` by applying the functor
 that you just defined to an appropriate module for serializing integers.
 ......................................................................*)
 
-module IntStack = MakeStack (struct type t = int let serialize = string_of_int end );;
+module IntSerialize : (SERIALIZE with type t = int) =
+  struct
+    type t = int
+    let serialize = string_of_int
+end  ;;
+
+module IntStack : (STACK with type element = IntSerialize.t) =  MakeStack(IntSerialize) ;;
 
 (*......................................................................
 Exercise 1C: Make a module `IntStringStack` that creates a stack whose
@@ -152,7 +158,10 @@ For this oversimplified serialization function, you may assume that
 the string will be made up of alphanumeric characters only.
 ......................................................................*)
 
-module IntStringStack = MakeStack (struct type t = (int * string) let serialize = 
-(fun (a, b) -> string_of_int a ^ b) end );;
+module IntStringSerialize =
+  struct
+    type t = (int * string)
+    let serialize (n, s) = "(" ^ string_of_int n ^ ",'" ^ s ^ "')"
+end  ;;
 
-
+module IntStringStack =  MakeStack(IntStringSerialize) ;;
