@@ -139,9 +139,10 @@ module IntSerialize : (SERIALIZE with type t = int) =
   struct
     type t = int
     let serialize = string_of_int
-end  ;;
+  end  ;;
 
-module IntStack : (STACK with type element = IntSerialize.t) =  MakeStack(IntSerialize) ;;
+module IntStack : (STACK with type element = IntSerialize.t) =
+  MakeStack(IntSerialize) ;;
 
 (*......................................................................
 Exercise 1C: Make a module `IntStringStack` that creates a stack whose
@@ -162,7 +163,9 @@ the string will be made up of alphanumeric characters only.
 module IntStringSerialize =
   struct
     type t = (int * string)
-    let serialize (n, s) = "(" ^ string_of_int n ^ ",'" ^ s ^ "')"
-end  ;;
+    let serialize (n, s) = 
+      "(" ^ string_of_int n ^ ",'" ^ s ^ "')"
+  end  ;;
 
-module IntStringStack =  MakeStack(IntStringSerialize)  ;;
+module IntStringStack =
+  MakeStack(IntStringSerialize)  ;;
